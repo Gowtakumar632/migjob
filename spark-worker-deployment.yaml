@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: spark
+  name: spark-worker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spark
+      role: worker
+  template:
+    metadata:
+      labels:
+        app: spark
+        role: worker
+    spec:
+      containers:
+      - env:
+        - name: SPARK_MASTER
+          value: spark://spark-master:7077
+        image: localhost:5000/my-spark-app:latest
+        name: spark-worker
+        ports:
+        - containerPort: 8081

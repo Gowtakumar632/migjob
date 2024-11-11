@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-job
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spark-job
+  template:
+    metadata:
+      labels:
+        app: spark-job
+    spec:
+      containers:
+        - name: spark-job-container
+          image: localhost:5000/my-spark-app:latest
+          args: ["--conf", "spark.jars.ivy=/tmp/.ivy2", "--master", "spark://spark-master:7077", "/app/app.py"]

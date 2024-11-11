@@ -1,0 +1,33 @@
+networks:
+  spark-network: null
+services:
+  spark-master:
+    environment:
+    - SPARK_MODE=master
+    - SPARK_MASTER_HOST=spark-master
+    hostname: spark-master
+    image: bitnami/spark:latest
+    networks:
+    - spark-network
+    ports:
+    - 7077:7077
+    - 8080:8080
+  spark-worker:
+    depends_on:
+    - spark-master
+    environment:
+    - SPARK_MODE=worker
+    - SPARK_MASTER_URL=spark://spark-master:7077
+    - SPARK_MASTER=spark://spark-master:7077
+    image: bitnami/spark:latest
+    networks:
+    - spark-network
+  spark-worker-2:
+    depends_on:
+    - spark-master
+    environment:
+    - SPARK_MODE=worker
+    - SPARK_MASTER_URL=spark://spark-master:7077
+    image: bitnami/spark:latest
+    networks:
+    - spark-network
